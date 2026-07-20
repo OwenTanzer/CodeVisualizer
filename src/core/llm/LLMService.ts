@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import { logInfo, logWarn, logError } from "./LLMLogger";
 
-export type Provider = "openai" | "gemini" | "groq" | "ollama";
+export type Provider = "openai" | "gemini" | "groq" | "ollama" | "anthropic";
 
 export interface TranslateParams {
   mermaidSource: string;
@@ -26,6 +26,8 @@ export class LLMService {
       case "ollama":
         // Commonly available local models in Ollama (actual availability depends on local installation)
         return ["llama3.2", "llama3.1", "qwen2.5:7b", "mistral:7b"];
+      case "anthropic":
+        return ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-4-8"];
     }
   }
 
@@ -293,6 +295,15 @@ async function callProvider(
           expectedCount,
           labels
         );
+      case "anthropic":
+        return await callAnthropic(
+          model,
+          apiKey,
+          systemPrompt,
+          userPrompt,
+          expectedCount,
+          labels
+        );
     }
   } catch (e) {
     logError(`LLM call failed for provider ${provider}: ${e}`);
@@ -339,6 +350,19 @@ function isGeminiGenerateContentResponse(x: unknown): x is GeminiGenerateContent
   if (!Array.isArray(obj.candidates)) return false;
   // Minimal validation
   return true;
+}
+
+interface AnthropicContentBlock {
+  type?: string;
+  text?: string;
+}
+interface AnthropicMessagesResponse {
+  content?: AnthropicContentBlock[];
+}
+function isAnthropicMessagesResponse(x: unknown): x is AnthropicMessagesResponse {
+  if (!x || typeof x !== "object") return false;
+  const obj = x as { content?: unknown };
+  return obj.content === undefined || Array.isArray(obj.content);
 }
 
 function parseLabelsJsonText(
@@ -654,6 +678,79 @@ async function callGroq(
   } catch (err) {
     logError(
       `Groq fetch error: ${err instanceof Error ? err.message : String(err)}`,
+    );
+    return null;
+  }
+}
+
+async function callAnthropic(
+  model: string,
+  apiKey: string,
+  systemPrompt: string,
+  userPrompt: string,
+  expectedCount: number,
+  referenceLabels: string[],
+): Promise<string[] | null> {
+  try {
+    const bodyPayload = {
+      model,
+      max_tokens: 1024,
+      temperature: 0.2,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }],
+    };
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify(bodyPayload),
+    });
+    if (!res.ok) {
+      const text = await safeReadBody(res);
+      logWarn(
+        `Anthropic responded with ${res.status} ${res.statusText}. Body snippet: ${text.substring(
+          0,
+          500
+        )}`
+      );
+      return null;
+    }
+    const data: unknown = await res.json();
+    if (!isAnthropicMessagesResponse(data)) {
+      logWarn(
+        `Anthropic response shape unexpected: ${JSON.stringify(data).substring(
+          0,
+          500
+        )}`
+      );
+      return null;
+    }
+    const content = data.content
+      ?.filter((block) => block.type === "text" && block.text)
+      .map((block) => block.text)
+      .join("");
+    if (!content) {
+      logWarn("Anthropic response did not contain text content");
+      return null;
+    }
+    const jsonMatch = content.match(/\[[\s\S]*\]/);
+    const jsonString = jsonMatch ? jsonMatch[0] : content;
+    const parsed = parseLabelsJsonText(jsonString, expectedCount, referenceLabels);
+    if (!parsed) {
+      logWarn(
+        `Anthropic output could not be parsed as JSON array. Content: ${jsonString.substring(
+          0,
+          500
+        )}`
+      );
+    }
+    return parsed;
+  } catch (err) {
+    logError(
+      `Anthropic fetch error: ${err instanceof Error ? err.message : String(err)}`,
     );
     return null;
   }
