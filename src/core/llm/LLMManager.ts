@@ -28,8 +28,22 @@ export class LLMManager {
       // Ollama runs locally and does not require an API key
       return true;
     }
-    const key = await context.secrets.get(LLMManager.secretKeyName(provider));
+    const key = await LLMManager.resolveApiKey(context, provider, cfg);
     return Boolean(key);
+  }
+
+  // The "codevisualizer.llm.apiKey" setting is a plain-text fallback for users who
+  // set it directly (e.g. via the Settings UI) instead of the "Enable AI Labels"
+  // command, which stores the key in SecretStorage. SecretStorage takes precedence.
+  private static async resolveApiKey(
+    context: vscode.ExtensionContext,
+    provider: Provider,
+    cfg: vscode.WorkspaceConfiguration,
+  ): Promise<string | undefined> {
+    const stored = await context.secrets.get(LLMManager.secretKeyName(provider));
+    if (stored) return stored;
+    const fromSettings = cfg.get<string>("apiKey", "");
+    return fromSettings ? fromSettings : undefined;
   }
 
   public static async enableLLM(
@@ -225,7 +239,11 @@ export class LLMManager {
     const key =
       provider === "ollama"
         ? undefined
-        : await context.secrets.get(this.secretKeyName(provider));
+        : await LLMManager.resolveApiKey(
+            context,
+            provider,
+            vscode.workspace.getConfiguration("codevisualizer.llm"),
+          );
     let baseUrl: string | undefined = undefined;
     if (provider === "ollama") {
       baseUrl =
