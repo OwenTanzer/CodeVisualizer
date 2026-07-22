@@ -56,12 +56,14 @@ export async function analyzePythonCode(
 }
 
 /**
- * Analyzes Python code, resolving the target function by its EXACT byte
- * range (UTF-8 byte offsets, tree-sitter's own unit -- not UTF-16 JS
- * string indices) rather than by containment. Use this when the caller
- * already has a canonical function coordinate (e.g. from a symbol index
- * built on the same tree-sitter byte ranges) and needs the exact
- * function, not whichever one happens to contain a position -- a
+ * Analyzes Python code, resolving the target function by its EXACT
+ * range (despite the startByte/endByte naming, these are UTF-16 code
+ * unit offsets via web-tree-sitter's JS binding, not UTF-8 bytes -- see
+ * the correction note on FunctionRangeNotFoundError) rather than by
+ * containment. Use this when the caller already has a canonical
+ * function coordinate (e.g. from a symbol index built on the same
+ * tree-sitter ranges) and needs the exact function, not whichever one
+ * happens to contain a position -- a
  * position inside a nested function would otherwise resolve to its
  * outer enclosing function via analyzePythonCode.
  *

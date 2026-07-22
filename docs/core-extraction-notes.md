@@ -202,8 +202,9 @@ Four real issues, all verified fixed, not just addressed cosmetically:
    exactly — verified it correctly disambiguates both `inner` closures by
    range, and that a position-based lookup for the same position really
    does return `make_multiplier` (the outer function), not `inner`.
-   `startByte`/`endByte` are explicitly documented as UTF-8 byte offsets
-   (tree-sitter's own unit), not UTF-16 JS string indices.
+   `startByte`/`endByte` were originally documented here as UTF-8 byte
+   offsets — **this was wrong, corrected below** (see "Correction" at
+   the end of this section).
 3. **The "narrow public API" wasn't actually enforced.** The 7 remaining
    language parsers (and the Mermaid generators) imported arbitrary
    `@codevisualizer/core/dist/...` paths directly, making every internal
@@ -230,3 +231,26 @@ Four real issues, all verified fixed, not just addressed cosmetically:
    lint, and `vscode-test`. New `packages/core/test/function-range.test.mjs`
    formalizes finding 2's fixture-based verification into a real,
    committed regression test (4 assertions, all passing).
+
+### Correction (found downstream, codeflow-tool MOO-71 Commit 5)
+
+The `startByte`/`endByte` parameters of `analyzePythonFunction`/
+`generateFlowchartForRange` (finding 2 above) were documented at the
+time as UTF-8 byte offsets — **this was wrong**. `web-tree-sitter`'s JS
+binding (used by this package) reports `Parser.SyntaxNode.startIndex`/
+`endIndex` in **UTF-16 code units** (plain JS string `.length`
+semantics), not raw UTF-8 bytes — despite the general (and, for the
+native/C tree-sitter library, true) claim that tree-sitter uses byte
+offsets.
+
+This was only discovered because `codeflow-tool` actually consumes this
+API and cross-verified it against a real fixture containing multi-byte
+UTF-8 characters (accented Latin, CJK, an astral-plane emoji): a
+byte-length-based conversion drifted by exactly the UTF-8-vs-UTF-16
+difference of the unicode line, while a plain-`.length`-based conversion
+matched this package's own `startIndex`/`endIndex` exactly. The `"byte"`
+naming in the parameter names and error messages is a misnomer this
+package never renamed (a breaking rename wasn't judged worth it for
+already-consumed field names); the doc comments and
+`FunctionRangeNotFoundError`'s message have been corrected to say what
+these values actually are.

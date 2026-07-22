@@ -201,17 +201,19 @@ export class PyAstParser extends AbstractParser {
   }
 
   /**
-   * Resolves a function by its EXACT byte range (tree-sitter's
-   * startIndex/endIndex, which are UTF-8 byte offsets, not UTF-16 JS
-   * string indices) rather than by "the function containing this
-   * position" -- generateFlowchart's position-based lookup returns
-   * whichever function_definition a position falls within, which for a
-   * position inside a nested function can incorrectly return the
-   * OUTER enclosing function instead (descendantsOfType visits parents
-   * before children, so .find() hits the outer one first). Callers that
-   * already have an exact canonical coordinate (e.g. from a symbol
-   * index that itself uses tree-sitter byte ranges) should use this
-   * instead of generateFlowchart's position-based path.
+   * Resolves a function by its EXACT range (tree-sitter's
+   * startIndex/endIndex -- see the correction note on
+   * FunctionRangeNotFoundError: these are UTF-16 code unit offsets via
+   * web-tree-sitter's JS binding, not UTF-8 bytes despite the "byte"
+   * naming) rather than by "the function containing this position" --
+   * generateFlowchart's position-based lookup returns whichever
+   * function_definition a position falls within, which for a position
+   * inside a nested function can incorrectly return the OUTER enclosing
+   * function instead (descendantsOfType visits parents before children,
+   * so .find() hits the outer one first). Callers that already have an
+   * exact canonical coordinate (e.g. from a symbol index that itself
+   * uses tree-sitter ranges) should use this instead of
+   * generateFlowchart's position-based path.
    *
    * Throws FunctionRangeNotFoundError if no function_definition has
    * exactly this range -- this is a deliberate hard failure, not a
