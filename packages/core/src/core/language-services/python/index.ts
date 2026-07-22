@@ -1,14 +1,40 @@
+import { join } from "node:path";
 import { PyAstParser } from "./PyAstParser";
 import { FlowchartIR } from "../../../ir/ir";
 
 let parserPromise: Promise<PyAstParser> | null = null;
 
 /**
- * Initializes the Python language service.
- * @param wasmPath The absolute path to the tree-sitter-python.wasm file.
+ * Resolves the tree-sitter-python.wasm grammar bundled with this
+ * package, relative to the compiled module itself -- correct regardless
+ * of where node_modules/@codevisualizer/core ends up installed. Used as
+ * initPythonLanguageService's default when no explicit path is given
+ * (e.g. a Node/Railway consumer); a VS Code extension can still pass its
+ * own explicit path, unchanged.
  */
-export function initPythonLanguageService(wasmPath: string) {
-  parserPromise = PyAstParser.create(wasmPath);
+export function resolvePythonWasmPath(): string {
+  return join(__dirname, "tree-sitter-python.wasm");
+}
+
+/**
+ * Initializes the Python language service.
+ * @param wasmPath Absolute path to tree-sitter-python.wasm. Defaults to
+ *   the copy bundled with this package (resolvePythonWasmPath()) when
+ *   omitted.
+ * @returns A promise that resolves once initialization succeeds, or
+ *   rejects with the real initialization error (e.g.
+ *   GrammarAssetNotFoundError) -- callers that need to observe
+ *   initialization failure should await this.
+ */
+export async function initPythonLanguageService(wasmPath: string = resolvePythonWasmPath()): Promise<void> {
+  try {
+    parserPromise = PyAstParser.create(wasmPath);
+    await parserPromise;
+    console.log("Python language service initialized successfully");
+  } catch (error) {
+    console.error("Failed to initialize Python language service:", error);
+    throw error;
+  }
 }
 
 /**

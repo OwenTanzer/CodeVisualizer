@@ -146,3 +146,35 @@ isn't rediscovered as a surprise later.
   The extension currently has no automated test suite at all; this
   commit's "existing tests still pass" check is trivially true (0 of 0)
   but should not be read as meaningful regression coverage.
+
+## Commit 3 findings: WASM loading and initialization
+
+Fixed for Python (the only language extracted into the package):
+`initPythonLanguageService` is now `async` and rethrows real
+initialization failures instead of returning `undefined` synchronously,
+a missing grammar file now throws a typed `GrammarAssetNotFoundError`
+(`language`/`wasmPath` fields) instead of a bare `ENOENT`, and
+`resolvePythonWasmPath()` gives Node consumers (e.g. `codeflow-tool`) a
+working default grammar path without needing to know the package's
+internal `dist/` layout.
+
+Two things found but **not fixed**, recorded so they aren't silently
+lost:
+
+- **Three sibling languages have the exact same async/await bug Python
+  had**: `initTypeScriptLanguageService`, `initJavaLanguageService`, and
+  `initPhpLanguageService` are not `async` and never return/await their
+  own `<Lang>AstParser.create(...)` promise — the same
+  "extension's per-language try/catch never actually catches this"
+  problem this commit fixed for Python. `initCppLanguageService`/
+  `initCLanguageService`/`initRustLanguageService`/
+  `initGoLanguageService` are already correctly written (see
+  `src/core/language-services/cpp/index.ts` — the pattern Python's fix
+  mirrors). Not fixed here: those 3 languages aren't part of the
+  extracted package and MOO-71's v1 acceptance is Python-first: fixing
+  them is a legitimate, separate CodeVisualizer bug-fix, not part of this
+  ticket's scope.
+- **No browser/fetch-based WASM loading exists anywhere in this
+  codebase** — parsing happens in the extension host (Node), not the
+  webview. The ticket's "keep browser loading available only if useful"
+  bullet has nothing to preserve or build here.

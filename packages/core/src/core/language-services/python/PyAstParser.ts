@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import Parser from "web-tree-sitter";
 import { AbstractParser } from "../../common/AbstractParser";
 import {
@@ -8,6 +9,7 @@ import {
 } from "../../../ir/ir";
 import { ProcessResult, LoopContext } from "../../common/AstParserTypes";
 import { ensureParserInit } from "../common/ParserInit";
+import { GrammarAssetNotFoundError } from "../common/errors";
 
 export class PyAstParser extends AbstractParser {
   private currentFunctionIsLambda = false;
@@ -23,6 +25,9 @@ export class PyAstParser extends AbstractParser {
    * @returns A promise that resolves to a new PyAstParser instance.
    */
   public static async create(wasmPath: string): Promise<PyAstParser> {
+    if (!existsSync(wasmPath)) {
+      throw new GrammarAssetNotFoundError("Python", wasmPath);
+    }
     await ensureParserInit();
     const language = await Parser.Language.load(wasmPath);
     const parser = new Parser();

@@ -9,7 +9,8 @@
 // (@codevisualizer/core/dist/core/common/AbstractParser), not through
 // this barrel.
 export { ensureParserInit } from "./core/language-services/common/ParserInit";
-export { initPythonLanguageService, analyzePythonCode } from "./core/language-services/python";
+export { GrammarAssetNotFoundError } from "./core/language-services/common/errors";
+export { initPythonLanguageService, analyzePythonCode, resolvePythonWasmPath } from "./core/language-services/python";
 export {
   FlowchartIR,
   FlowchartNode,

@@ -25,6 +25,12 @@ export async function initLanguageServices(context: vscode.ExtensionContext) {
           "dist",
           "tree-sitter-python.wasm"
         ).fsPath;
+        // MOO-71 Commit 3: this await previously no-opped --
+        // initPythonLanguageService returned undefined synchronously, so
+        // a real init failure surfaced later as an unhandled rejection,
+        // bypassing this try/catch entirely. It's now async and rethrows,
+        // so this await (and the compatibility-mode handling below) work
+        // as originally intended.
         await initPythonLanguageService(pythonWasmPath);
       },
     },
