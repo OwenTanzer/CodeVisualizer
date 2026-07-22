@@ -1,13 +1,13 @@
 import Parser from "web-tree-sitter";
-import { AbstractParser } from "../../common/AbstractParser";
+import { AbstractParser } from "@codevisualizer/core/dist/core/common/AbstractParser";
 import {
   FlowchartIR,
   FlowchartNode,
   FlowchartEdge,
   NodeType,
-} from "../../../ir/ir";
-import { ProcessResult, LoopContext } from "../../common/AstParserTypes";
-import { ensureParserInit } from "../common/ParserInit";
+} from "@codevisualizer/core";
+import { ProcessResult, LoopContext } from "@codevisualizer/core/dist/core/common/AstParserTypes";
+import { ensureParserInit } from "@codevisualizer/core";
 
 // Minimal Go parser: functions, if, for, return, break/continue, basic statements.
 export class GoAstParser extends AbstractParser {

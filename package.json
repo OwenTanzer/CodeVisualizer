@@ -4,6 +4,9 @@
   "version": "1.0.6",
   "publisher": "ducphamngoc",
   "description": "Real-time interactive flowcharts for your code",
+  "workspaces": [
+    "packages/core"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/DucPhamNgoc08/CodeVisualizer.git"

@@ -1,5 +1,5 @@
 import { GoAstParser } from "./GoAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let goParser: GoAstParser | null = null;
 

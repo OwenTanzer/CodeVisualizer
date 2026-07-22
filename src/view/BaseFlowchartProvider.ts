@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { analyzeCode } from "../core/analyzer";
-import { LocationMapEntry } from "../ir/ir";
+import { LocationMapEntry } from "@codevisualizer/core";
 import { EnhancedMermaidGenerator } from "../core/EnhancedMermaidGenerator";
 import { LLMManager } from "../core/llm/LLMManager";
 import { getExtensionContext } from "../core/llm/LLMContext";

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { initPythonLanguageService } from "./python";
+import { initPythonLanguageService } from "@codevisualizer/core";
 import { initTypeScriptLanguageService } from "./typescript";
 import { initJavaLanguageService } from "./java";
 import { initCppLanguageService } from "./cpp";

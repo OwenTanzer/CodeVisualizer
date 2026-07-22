@@ -1,5 +1,5 @@
 import { CppAstParser } from "./CppAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let cppParser: CppAstParser | null = null;
 

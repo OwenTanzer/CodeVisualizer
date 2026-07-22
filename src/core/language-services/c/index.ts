@@ -1,5 +1,5 @@
 import { CAstParser } from "./CAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let cParser: CAstParser | null = null;
 

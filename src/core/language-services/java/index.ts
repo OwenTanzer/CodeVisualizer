@@ -1,5 +1,5 @@
 import { JavaAstParser } from "./JavaAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let parserPromise: Promise<JavaAstParser> | null = null;
 

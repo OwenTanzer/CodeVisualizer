@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
-import { FlowchartIR, FlowchartNode, FlowchartEdge, NodeType, NodeCategory } from "../../ir/ir";
+import { FlowchartIR, FlowchartNode, FlowchartEdge, NodeType, NodeCategory } from "@codevisualizer/core";
 import { FileCategory, FileTypeClassifier } from "./FileTypeClassifier";
 
 export interface CodebaseModule{
