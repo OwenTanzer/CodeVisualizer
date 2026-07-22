@@ -1,0 +1,316 @@
+{
+  "nodes": [
+    {
+      "id": "start_0",
+      "label": "Start",
+      "nodeType": "entry",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 217
+      }
+    },
+    {
+      "id": "end_1",
+      "label": "End",
+      "nodeType": "exit",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 217
+      }
+    },
+    {
+      "id": "cond_2",
+      "label": "not items",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 42,
+        "end": 51
+      }
+    },
+    {
+      "id": "return_3",
+      "label": "return None",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 61,
+        "end": 72
+      }
+    },
+    {
+      "id": "for_header_4",
+      "label": "for item in items",
+      "nodeType": "loop_start",
+      "nodeCategory": "loop_control",
+      "shape": "diamond",
+      "style": "fill:#e3f2fd,stroke:#1976d2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 77,
+        "end": 196
+      }
+    },
+    {
+      "id": "for_exit_5",
+      "label": "end loop",
+      "nodeType": "loop_end",
+      "nodeCategory": "loop_control",
+      "shape": "stadium",
+      "style": "fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 77,
+        "end": 196
+      }
+    },
+    {
+      "id": "cond_6",
+      "label": "predicate(item)",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 107,
+        "end": 122
+      }
+    },
+    {
+      "id": "return_7",
+      "label": "return item",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 136,
+        "end": 147
+      }
+    },
+    {
+      "id": "cond_8",
+      "label": "item is None",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 159,
+        "end": 171
+      }
+    },
+    {
+      "id": "return_9",
+      "label": "return None",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 185,
+        "end": 196
+      }
+    },
+    {
+      "id": "return_10",
+      "label": "return items[-1]",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 201,
+        "end": 217
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "return_3",
+      "to": "end_1"
+    },
+    {
+      "from": "cond_2",
+      "to": "return_3",
+      "label": "True"
+    },
+    {
+      "from": "return_7",
+      "to": "end_1"
+    },
+    {
+      "from": "cond_6",
+      "to": "return_7",
+      "label": "True"
+    },
+    {
+      "from": "return_9",
+      "to": "end_1"
+    },
+    {
+      "from": "cond_8",
+      "to": "return_9",
+      "label": "True"
+    },
+    {
+      "from": "cond_6",
+      "to": "cond_8",
+      "label": "False"
+    },
+    {
+      "from": "for_header_4",
+      "to": "cond_6",
+      "label": "Loop"
+    },
+    {
+      "from": "cond_8",
+      "to": "for_header_4"
+    },
+    {
+      "from": "for_header_4",
+      "to": "for_exit_5",
+      "label": "End Loop"
+    },
+    {
+      "from": "cond_2",
+      "to": "for_header_4",
+      "label": "False"
+    },
+    {
+      "from": "return_10",
+      "to": "end_1"
+    },
+    {
+      "from": "for_exit_5",
+      "to": "return_10"
+    },
+    {
+      "from": "start_0",
+      "to": "cond_2"
+    }
+  ],
+  "locationMap": [
+    {
+      "start": 42,
+      "end": 51,
+      "nodeId": "cond_2"
+    },
+    {
+      "start": 61,
+      "end": 72,
+      "nodeId": "return_3"
+    },
+    {
+      "start": 77,
+      "end": 196,
+      "nodeId": "for_header_4"
+    },
+    {
+      "start": 107,
+      "end": 122,
+      "nodeId": "cond_6"
+    },
+    {
+      "start": 136,
+      "end": 147,
+      "nodeId": "return_7"
+    },
+    {
+      "start": 159,
+      "end": 171,
+      "nodeId": "cond_8"
+    },
+    {
+      "start": 185,
+      "end": 196,
+      "nodeId": "return_9"
+    },
+    {
+      "start": 201,
+      "end": 217,
+      "nodeId": "return_10"
+    }
+  ],
+  "functionRange": {
+    "start": 0,
+    "end": 217
+  },
+  "title": "Flowchart for function: first_match",
+  "entryNodeId": "start_0",
+  "exitNodeId": "end_1"
+}

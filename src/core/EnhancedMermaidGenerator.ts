@@ -1,5 +1,5 @@
-import { FlowchartIR, FlowchartNode, FlowchartEdge, NodeType } from "../ir/ir";
-import { StringProcessor } from "./utils/StringProcessor";
+import { FlowchartIR, FlowchartNode, FlowchartEdge, NodeType } from "@codevisualizer/core";
+import { StringProcessor } from "@codevisualizer/core/internal";
 import { SubtleThemeManager, ThemeStyles } from "./utils/ThemeManager";
 
 // Optimized string building

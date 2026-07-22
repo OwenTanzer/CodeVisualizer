@@ -1,0 +1,282 @@
+{
+  "nodes": [
+    {
+      "id": "start_0",
+      "label": "Start",
+      "nodeType": "entry",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 332
+      }
+    },
+    {
+      "id": "end_1",
+      "label": "End",
+      "nodeType": "exit",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 332
+      }
+    },
+    {
+      "id": "try_entry_2",
+      "label": "try",
+      "nodeType": "exception",
+      "nodeCategory": "exception_handling",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "high",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 27,
+        "end": 314
+      }
+    },
+    {
+      "id": "stmt_3",
+      "label": "print(#quot;done#quot;)",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 301,
+        "end": 314
+      }
+    },
+    {
+      "id": "assert_cond_4",
+      "label": "assert b != 0",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 47,
+        "end": 53
+      }
+    },
+    {
+      "id": "raise_assert_5",
+      "label": "raise AssertionError: #quot;divisor must not be zero#quot;",
+      "nodeType": "exception",
+      "nodeCategory": "exception_handling",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 40,
+        "end": 81
+      }
+    },
+    {
+      "id": "stmt_6",
+      "label": "result = a / b",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 90,
+        "end": 104
+      }
+    },
+    {
+      "id": "stmt_7",
+      "label": "result = None",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 143,
+        "end": 156
+      }
+    },
+    {
+      "id": "raise_8",
+      "label": "raise RuntimeError(#quot;invalid input#quot;), e",
+      "nodeType": "exception",
+      "nodeCategory": "exception_handling",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 193,
+        "end": 235
+      }
+    },
+    {
+      "id": "return_9",
+      "label": "return result",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 319,
+        "end": 332
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "assert_cond_4",
+      "to": "raise_assert_5",
+      "label": "False"
+    },
+    {
+      "from": "raise_assert_5",
+      "to": "stmt_3"
+    },
+    {
+      "from": "assert_cond_4",
+      "to": "stmt_6",
+      "label": "True"
+    },
+    {
+      "from": "try_entry_2",
+      "to": "assert_cond_4"
+    },
+    {
+      "from": "stmt_6",
+      "to": "stmt_3"
+    },
+    {
+      "from": "try_entry_2",
+      "to": "stmt_7",
+      "label": "on ZeroDivisionError"
+    },
+    {
+      "from": "stmt_7",
+      "to": "stmt_3"
+    },
+    {
+      "from": "raise_8",
+      "to": "stmt_3"
+    },
+    {
+      "from": "try_entry_2",
+      "to": "raise_8",
+      "label": "on ValueError as e"
+    },
+    {
+      "from": "return_9",
+      "to": "end_1"
+    },
+    {
+      "from": "stmt_3",
+      "to": "return_9"
+    },
+    {
+      "from": "start_0",
+      "to": "try_entry_2"
+    }
+  ],
+  "locationMap": [
+    {
+      "start": 27,
+      "end": 314,
+      "nodeId": "try_entry_2"
+    },
+    {
+      "start": 301,
+      "end": 314,
+      "nodeId": "stmt_3"
+    },
+    {
+      "start": 40,
+      "end": 81,
+      "nodeId": "assert_cond_4"
+    },
+    {
+      "start": 90,
+      "end": 104,
+      "nodeId": "stmt_6"
+    },
+    {
+      "start": 143,
+      "end": 156,
+      "nodeId": "stmt_7"
+    },
+    {
+      "start": 193,
+      "end": 235,
+      "nodeId": "raise_8"
+    },
+    {
+      "start": 319,
+      "end": 332,
+      "nodeId": "return_9"
+    }
+  ],
+  "functionRange": {
+    "start": 0,
+    "end": 332
+  },
+  "title": "Flowchart for function: safe_divide",
+  "entryNodeId": "start_0",
+  "exitNodeId": "end_1"
+}

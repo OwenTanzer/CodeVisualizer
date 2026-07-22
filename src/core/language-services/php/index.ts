@@ -1,5 +1,5 @@
 import { PhpAstParser } from "./PhpAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let parserPromise: Promise<PhpAstParser> | null = null;
 

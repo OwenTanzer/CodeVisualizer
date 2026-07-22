@@ -1,5 +1,5 @@
 import { TsAstParser } from "./TsAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let parserPromise: Promise<TsAstParser> | null = null;
 

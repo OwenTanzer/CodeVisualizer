@@ -1,5 +1,5 @@
 import { RustAstParser } from "./RustAstParser";
-import { FlowchartIR } from "../../../ir/ir";
+import { FlowchartIR } from "@codevisualizer/core";
 
 let rustParser: RustAstParser | null = null;
 

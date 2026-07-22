@@ -1,4 +1,4 @@
-import { NodeType } from "../../ir/ir";
+import { NodeType } from "@codevisualizer/core";
 
 // Unchanged interfaces
 export interface NodeStyle {

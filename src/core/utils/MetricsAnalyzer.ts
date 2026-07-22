@@ -1,4 +1,4 @@
-import { FlowchartIR, NodeType } from "../../ir/ir";
+import { FlowchartIR, NodeType } from "@codevisualizer/core";
 
 export interface CodeMetrics {
   linesOfCode: number;

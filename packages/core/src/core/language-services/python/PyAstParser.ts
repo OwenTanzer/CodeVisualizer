@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import Parser from "web-tree-sitter";
 import { AbstractParser } from "../../common/AbstractParser";
 import {
@@ -8,6 +9,7 @@ import {
 } from "../../../ir/ir";
 import { ProcessResult, LoopContext } from "../../common/AstParserTypes";
 import { ensureParserInit } from "../common/ParserInit";
+import { GrammarAssetNotFoundError, FunctionRangeNotFoundError } from "../common/errors";
 
 export class PyAstParser extends AbstractParser {
   private currentFunctionIsLambda = false;
@@ -23,6 +25,9 @@ export class PyAstParser extends AbstractParser {
    * @returns A promise that resolves to a new PyAstParser instance.
    */
   public static async create(wasmPath: string): Promise<PyAstParser> {
+    if (!existsSync(wasmPath)) {
+      throw new GrammarAssetNotFoundError("Python", wasmPath);
+    }
     await ensureParserInit();
     const language = await Parser.Language.load(wasmPath);
     const parser = new Parser();
@@ -192,6 +197,51 @@ export class PyAstParser extends AbstractParser {
       };
     }
 
+    return this.buildFlowchartForTarget(targetNode, isLambda);
+  }
+
+  /**
+   * Resolves a function by its EXACT byte range (tree-sitter's
+   * startIndex/endIndex, which are UTF-8 byte offsets, not UTF-16 JS
+   * string indices) rather than by "the function containing this
+   * position" -- generateFlowchart's position-based lookup returns
+   * whichever function_definition a position falls within, which for a
+   * position inside a nested function can incorrectly return the
+   * OUTER enclosing function instead (descendantsOfType visits parents
+   * before children, so .find() hits the outer one first). Callers that
+   * already have an exact canonical coordinate (e.g. from a symbol
+   * index that itself uses tree-sitter byte ranges) should use this
+   * instead of generateFlowchart's position-based path.
+   *
+   * Throws FunctionRangeNotFoundError if no function_definition has
+   * exactly this range -- this is a deliberate hard failure, not a
+   * silent fallback, since a caller with a genuine canonical coordinate
+   * should always get an exact match.
+   */
+  public generateFlowchartForRange(
+    sourceCode: string,
+    range: { startByte: number; endByte: number }
+  ): FlowchartIR {
+    const tree = this.parser.parse(sourceCode);
+    this.resetState();
+
+    const targetNode = tree.rootNode
+      .descendantsOfType("function_definition")
+      .find(
+        (f) => f.startIndex === range.startByte && f.endIndex === range.endByte
+      );
+
+    if (!targetNode) {
+      throw new FunctionRangeNotFoundError(range.startByte, range.endByte);
+    }
+
+    return this.buildFlowchartForTarget(targetNode, false);
+  }
+
+  private buildFlowchartForTarget(
+    targetNode: Parser.SyntaxNode,
+    isLambda: boolean
+  ): FlowchartIR {
     this.currentFunctionIsLambda = isLambda;
     const bodyToProcess = isLambda
       ? targetNode.childForFieldName("right")!.childForFieldName("body")
@@ -264,7 +314,6 @@ export class PyAstParser extends AbstractParser {
       entryNodeId: entryId,
       exitNodeId: exitId,
     };
-
 
     return ir;
   }

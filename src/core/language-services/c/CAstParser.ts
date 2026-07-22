@@ -1,13 +1,13 @@
 import Parser from "web-tree-sitter";
-import { AbstractParser } from "../../common/AbstractParser";
+import { AbstractParser } from "@codevisualizer/core/internal";
 import {
   FlowchartIR,
   FlowchartNode,
   FlowchartEdge,
   NodeType,
-} from "../../../ir/ir";
-import { ProcessResult, LoopContext } from "../../common/AstParserTypes";
-import { ensureParserInit } from "../common/ParserInit";
+} from "@codevisualizer/core";
+import { ProcessResult, LoopContext } from "@codevisualizer/core/internal";
+import { ensureParserInit } from "@codevisualizer/core";
 
 export class CAstParser extends AbstractParser {
   private constructor(parser: Parser) {

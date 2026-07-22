@@ -1,0 +1,603 @@
+{
+  "nodes": [
+    {
+      "id": "start_0",
+      "label": "Start",
+      "nodeType": "entry",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 221
+      }
+    },
+    {
+      "id": "end_1",
+      "label": "End",
+      "nodeType": "exit",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 0,
+        "end": 221
+      }
+    },
+    {
+      "id": "assign_hof_10",
+      "label": "active = ...",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 28,
+        "end": 34
+      }
+    },
+    {
+      "id": "input_2",
+      "label": "Input: records",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 69,
+        "end": 76
+      }
+    },
+    {
+      "id": "filter_call_3",
+      "label": "filter()",
+      "nodeType": "function_call",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#e8eaf6,stroke:#3f51b5,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 42,
+        "end": 77
+      }
+    },
+    {
+      "id": "filter_apply_4",
+      "label": "Apply lambda to each element",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 49,
+        "end": 67
+      }
+    },
+    {
+      "id": "filter_decision_5",
+      "label": "lambda returns True?",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 49,
+        "end": 67
+      }
+    },
+    {
+      "id": "filter_keep_6",
+      "label": "Keep element",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 42,
+        "end": 77
+      }
+    },
+    {
+      "id": "filter_discard_7",
+      "label": "Discard element",
+      "nodeType": "break_continue",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#ffe0b2,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 42,
+        "end": 77
+      }
+    },
+    {
+      "id": "filter_collected_8",
+      "label": "Collected results",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 42,
+        "end": 77
+      }
+    },
+    {
+      "id": "convert_9",
+      "label": "Convert to list",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 37,
+        "end": 78
+      }
+    },
+    {
+      "id": "assign_hof_16",
+      "label": "scores = ...",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 83,
+        "end": 89
+      }
+    },
+    {
+      "id": "input_11",
+      "label": "Input: active",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 115,
+        "end": 121
+      }
+    },
+    {
+      "id": "map_call_12",
+      "label": "map()",
+      "nodeType": "function_call",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#e8eaf6,stroke:#3f51b5,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 92,
+        "end": 122
+      }
+    },
+    {
+      "id": "map_apply_13",
+      "label": "Apply lambda to each element: new_item = r.score",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 96,
+        "end": 113
+      }
+    },
+    {
+      "id": "map_collect_14",
+      "label": "Collect transformed element",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 92,
+        "end": 122
+      }
+    },
+    {
+      "id": "map_result_15",
+      "label": "Collected results",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 92,
+        "end": 122
+      }
+    },
+    {
+      "id": "assign_hof_22",
+      "label": "total = ...",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 127,
+        "end": 132
+      }
+    },
+    {
+      "id": "input_17",
+      "label": "Input: scores",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 166,
+        "end": 172
+      }
+    },
+    {
+      "id": "reduce_init_18",
+      "label": "accumulator = 0",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 174,
+        "end": 175
+      }
+    },
+    {
+      "id": "reduce_header_19",
+      "label": "For each item",
+      "nodeType": "loop_start",
+      "nodeCategory": "loop_control",
+      "shape": "diamond",
+      "style": "fill:#e3f2fd,stroke:#1976d2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 135,
+        "end": 176
+      }
+    },
+    {
+      "id": "reduce_apply_20",
+      "label": "accumulator = lambda acc, s: acc + s(accumulator, item)",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 142,
+        "end": 164
+      }
+    },
+    {
+      "id": "reduce_result_21",
+      "label": "Return final accumulator value",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "medium",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 135,
+        "end": 176
+      }
+    },
+    {
+      "id": "return_23",
+      "label": "return build_summary(total, len(active))",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 181,
+        "end": 221
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "assign_hof_10",
+      "to": "input_2"
+    },
+    {
+      "from": "input_2",
+      "to": "filter_call_3"
+    },
+    {
+      "from": "filter_call_3",
+      "to": "filter_apply_4",
+      "label": "Next item"
+    },
+    {
+      "from": "filter_apply_4",
+      "to": "filter_decision_5"
+    },
+    {
+      "from": "filter_decision_5",
+      "to": "filter_keep_6",
+      "label": "Yes"
+    },
+    {
+      "from": "filter_keep_6",
+      "to": "filter_call_3"
+    },
+    {
+      "from": "filter_decision_5",
+      "to": "filter_discard_7",
+      "label": "No"
+    },
+    {
+      "from": "filter_discard_7",
+      "to": "filter_call_3"
+    },
+    {
+      "from": "filter_call_3",
+      "to": "filter_collected_8",
+      "label": "End of list"
+    },
+    {
+      "from": "filter_collected_8",
+      "to": "convert_9"
+    },
+    {
+      "from": "assign_hof_16",
+      "to": "input_11"
+    },
+    {
+      "from": "input_11",
+      "to": "map_call_12"
+    },
+    {
+      "from": "map_call_12",
+      "to": "map_apply_13",
+      "label": "Next item"
+    },
+    {
+      "from": "map_apply_13",
+      "to": "map_collect_14"
+    },
+    {
+      "from": "map_collect_14",
+      "to": "map_call_12"
+    },
+    {
+      "from": "map_call_12",
+      "to": "map_result_15",
+      "label": "End of list"
+    },
+    {
+      "from": "convert_9",
+      "to": "assign_hof_16"
+    },
+    {
+      "from": "assign_hof_22",
+      "to": "input_17"
+    },
+    {
+      "from": "input_17",
+      "to": "reduce_init_18"
+    },
+    {
+      "from": "reduce_init_18",
+      "to": "reduce_header_19"
+    },
+    {
+      "from": "reduce_header_19",
+      "to": "reduce_apply_20",
+      "label": "Next"
+    },
+    {
+      "from": "reduce_apply_20",
+      "to": "reduce_header_19"
+    },
+    {
+      "from": "reduce_header_19",
+      "to": "reduce_result_21",
+      "label": "End"
+    },
+    {
+      "from": "map_result_15",
+      "to": "assign_hof_22"
+    },
+    {
+      "from": "return_23",
+      "to": "end_1"
+    },
+    {
+      "from": "reduce_result_21",
+      "to": "return_23"
+    },
+    {
+      "from": "start_0",
+      "to": "assign_hof_10"
+    }
+  ],
+  "locationMap": [
+    {
+      "start": 69,
+      "end": 76,
+      "nodeId": "input_2"
+    },
+    {
+      "start": 49,
+      "end": 67,
+      "nodeId": "filter_apply_4"
+    },
+    {
+      "start": 115,
+      "end": 121,
+      "nodeId": "input_11"
+    },
+    {
+      "start": 96,
+      "end": 113,
+      "nodeId": "map_apply_13"
+    },
+    {
+      "start": 166,
+      "end": 172,
+      "nodeId": "input_17"
+    },
+    {
+      "start": 174,
+      "end": 175,
+      "nodeId": "reduce_init_18"
+    },
+    {
+      "start": 142,
+      "end": 164,
+      "nodeId": "reduce_apply_20"
+    },
+    {
+      "start": 181,
+      "end": 221,
+      "nodeId": "return_23"
+    }
+  ],
+  "functionRange": {
+    "start": 0,
+    "end": 221
+  },
+  "title": "Flowchart for function: summarize",
+  "entryNodeId": "start_0",
+  "exitNodeId": "end_1"
+}

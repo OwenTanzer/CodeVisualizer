@@ -1,0 +1,109 @@
+{
+  "nodes": [
+    {
+      "id": "start_0",
+      "label": "Start",
+      "nodeType": "entry",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 459,
+        "end": 533
+      }
+    },
+    {
+      "id": "end_1",
+      "label": "End",
+      "nodeType": "exit",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 459,
+        "end": 533
+      }
+    },
+    {
+      "id": "stmt_2",
+      "label": "def inner(y): return x + y",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 482,
+        "end": 516
+      }
+    },
+    {
+      "id": "return_3",
+      "label": "return inner",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 521,
+        "end": 533
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "return_3",
+      "to": "end_1"
+    },
+    {
+      "from": "stmt_2",
+      "to": "return_3"
+    },
+    {
+      "from": "start_0",
+      "to": "stmt_2"
+    }
+  ],
+  "locationMap": [
+    {
+      "start": 482,
+      "end": 516,
+      "nodeId": "stmt_2"
+    },
+    {
+      "start": 521,
+      "end": 533,
+      "nodeId": "return_3"
+    }
+  ],
+  "functionRange": {
+    "start": 459,
+    "end": 533
+  },
+  "title": "Flowchart for function: make_adder",
+  "entryNodeId": "start_0",
+  "exitNodeId": "end_1"
+}

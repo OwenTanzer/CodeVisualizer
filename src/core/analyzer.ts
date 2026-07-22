@@ -1,6 +1,4 @@
-import * as vscode from "vscode";
-import { FlowchartIR } from "../ir/ir";
-import { analyzePythonCode } from "./language-services/python";
+import { FlowchartIR, analyzePythonCode } from "@codevisualizer/core";
 import { analyzeTypeScriptCode } from "./language-services/typescript";
 import { analyzeJavaCode } from "./language-services/java";
 import { analyzeCppCode } from "./language-services/cpp";

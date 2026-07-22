@@ -1,0 +1,282 @@
+{
+  "nodes": [
+    {
+      "id": "start_0",
+      "label": "Start",
+      "nodeType": "entry",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 385,
+        "end": 617
+      }
+    },
+    {
+      "id": "end_1",
+      "label": "End",
+      "nodeType": "exit",
+      "nodeCategory": "function_boundary",
+      "shape": "round",
+      "style": "fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 385,
+        "end": 617
+      }
+    },
+    {
+      "id": "with_2",
+      "label": "session.get(url) as resp",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 425,
+        "end": 617
+      }
+    },
+    {
+      "id": "stmt_3",
+      "label": "data = await resp.json()",
+      "nodeType": "assignment",
+      "nodeCategory": "data_operation",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 470,
+        "end": 494
+      }
+    },
+    {
+      "id": "cond_4",
+      "label": "not data",
+      "nodeType": "decision",
+      "nodeCategory": "control_flow",
+      "shape": "diamond",
+      "style": "fill:#fff3e0,stroke:#f57c00,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 506,
+        "end": 514
+      }
+    },
+    {
+      "id": "return_5",
+      "label": "return None",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 528,
+        "end": 539
+      }
+    },
+    {
+      "id": "for_header_6",
+      "label": "for item in data",
+      "nodeType": "loop_start",
+      "nodeCategory": "loop_control",
+      "shape": "diamond",
+      "style": "fill:#e3f2fd,stroke:#1976d2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 548,
+        "end": 597
+      }
+    },
+    {
+      "id": "for_exit_7",
+      "label": "end loop",
+      "nodeType": "loop_end",
+      "nodeCategory": "loop_control",
+      "shape": "stadium",
+      "style": "fill:#e1f5fe,stroke:#0288d1,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "medium",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 548,
+        "end": 597
+      }
+    },
+    {
+      "id": "stmt_8",
+      "label": "await process(item)",
+      "nodeType": "process",
+      "nodeCategory": "control_flow",
+      "shape": "rect",
+      "style": "fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "low",
+        "codeType": "asynchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 578,
+        "end": 597
+      }
+    },
+    {
+      "id": "return_9",
+      "label": "return data",
+      "nodeType": "return",
+      "nodeCategory": "control_flow",
+      "shape": "stadium",
+      "style": "fill:#ffebee,stroke:#d32f2f,stroke-width:1.5px,color:#000",
+      "semanticInfo": {
+        "complexity": "low",
+        "importance": "high",
+        "codeType": "synchronous",
+        "language": "python"
+      },
+      "location": {
+        "start": 606,
+        "end": 617
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "return_5",
+      "to": "end_1"
+    },
+    {
+      "from": "cond_4",
+      "to": "return_5",
+      "label": "True"
+    },
+    {
+      "from": "stmt_3",
+      "to": "cond_4"
+    },
+    {
+      "from": "for_header_6",
+      "to": "stmt_8",
+      "label": "Loop"
+    },
+    {
+      "from": "stmt_8",
+      "to": "for_header_6"
+    },
+    {
+      "from": "for_header_6",
+      "to": "for_exit_7",
+      "label": "End Loop"
+    },
+    {
+      "from": "cond_4",
+      "to": "for_header_6",
+      "label": "False"
+    },
+    {
+      "from": "return_9",
+      "to": "end_1"
+    },
+    {
+      "from": "for_exit_7",
+      "to": "return_9"
+    },
+    {
+      "from": "with_2",
+      "to": "stmt_3"
+    },
+    {
+      "from": "start_0",
+      "to": "with_2"
+    },
+    {
+      "from": "with_2",
+      "to": "end_1"
+    }
+  ],
+  "locationMap": [
+    {
+      "start": 425,
+      "end": 617,
+      "nodeId": "with_2"
+    },
+    {
+      "start": 470,
+      "end": 494,
+      "nodeId": "stmt_3"
+    },
+    {
+      "start": 506,
+      "end": 514,
+      "nodeId": "cond_4"
+    },
+    {
+      "start": 528,
+      "end": 539,
+      "nodeId": "return_5"
+    },
+    {
+      "start": 548,
+      "end": 597,
+      "nodeId": "for_header_6"
+    },
+    {
+      "start": 578,
+      "end": 597,
+      "nodeId": "stmt_8"
+    },
+    {
+      "start": 606,
+      "end": 617,
+      "nodeId": "return_9"
+    }
+  ],
+  "functionRange": {
+    "start": 385,
+    "end": 617
+  },
+  "title": "Flowchart for function: fetch_data",
+  "entryNodeId": "start_0",
+  "exitNodeId": "end_1"
+}

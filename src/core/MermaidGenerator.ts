@@ -1,5 +1,5 @@
-import { FlowchartIR, FlowchartNode } from '../ir/ir';
-import { StringProcessor } from './utils/StringProcessor';
+import { FlowchartIR, FlowchartNode } from '@codevisualizer/core';
+import { StringProcessor } from '@codevisualizer/core/internal';
 
 // Optimized string building
 class StringBuilder {

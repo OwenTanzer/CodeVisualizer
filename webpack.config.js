@@ -42,6 +42,8 @@ const config = {
         {
           from: path.resolve(
             __dirname,
+            "packages",
+            "core",
             "src",
             "core",
             "language-services",
