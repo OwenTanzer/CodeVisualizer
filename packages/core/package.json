@@ -4,6 +4,21 @@
   "description": "Standalone parser-to-FlowchartIR core, extracted from the CodeVisualizer VS Code extension (Python-first for v1).",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "default": "./dist/internal.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "internal": ["dist/internal.d.ts"]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -11,7 +26,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsc -p . && node scripts/copy-assets.mjs"
+    "build": "rimraf dist && tsc -p . && node scripts/copy-assets.mjs"
   },
   "dependencies": {
     "web-tree-sitter": "^0.22.2"

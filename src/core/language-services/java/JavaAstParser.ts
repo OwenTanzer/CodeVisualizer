@@ -1,12 +1,12 @@
 import Parser from "web-tree-sitter";
-import { AbstractParser } from "@codevisualizer/core/dist/core/common/AbstractParser";
+import { AbstractParser } from "@codevisualizer/core/internal";
 import {
   FlowchartIR,
   FlowchartNode,
   FlowchartEdge,
   NodeType,
 } from "@codevisualizer/core";
-import { ProcessResult, LoopContext } from "@codevisualizer/core/dist/core/common/AstParserTypes";
+import { ProcessResult, LoopContext } from "@codevisualizer/core/internal";
 import { ensureParserInit } from "@codevisualizer/core";
 
 export class JavaAstParser extends AbstractParser {

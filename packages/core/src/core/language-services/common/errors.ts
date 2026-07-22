@@ -16,3 +16,27 @@ export class GrammarAssetNotFoundError extends Error {
     this.wasmPath = wasmPath;
   }
 }
+
+// PR #1 review: the public API had no way to resolve an EXACT function
+// by canonical coordinate (only "the function containing this position",
+// which can return an outer function instead of a nested one). This is
+// thrown by PyAstParser.generateFlowchartForRange when no
+// function_definition has exactly the requested byte range -- a
+// deliberate hard failure (a caller with a genuine canonical coordinate
+// should always get an exact match), not a silent fallback to a nearby
+// function. startByte/endByte are UTF-8 byte offsets (tree-sitter's own
+// unit), not UTF-16 JS string indices.
+export class FunctionRangeNotFoundError extends Error {
+  public readonly startByte: number;
+  public readonly endByte: number;
+
+  constructor(startByte: number, endByte: number) {
+    super(
+      `No function definition found with the exact byte range [${startByte}, ${endByte}]. ` +
+        `Note: these must be UTF-8 byte offsets (tree-sitter's own unit), not UTF-16 JS string indices.`
+    );
+    this.name = "FunctionRangeNotFoundError";
+    this.startByte = startByte;
+    this.endByte = endByte;
+  }
+}

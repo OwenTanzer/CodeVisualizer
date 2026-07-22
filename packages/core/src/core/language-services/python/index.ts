@@ -38,7 +38,11 @@ export async function initPythonLanguageService(wasmPath: string = resolvePython
 }
 
 /**
- * Analyzes Python code.
+ * Analyzes Python code, resolving the target function by "the function
+ * containing this position" -- suited to an editor cursor position,
+ * where the enclosing function IS the intended target even for a
+ * position inside a nested function. Not suited to resolving an exact
+ * canonical coordinate; use analyzePythonFunction for that.
  */
 export async function analyzePythonCode(
   code: string,
@@ -49,4 +53,28 @@ export async function analyzePythonCode(
   }
   const parser = await parserPromise;
   return parser.generateFlowchart(code, undefined, position);
+}
+
+/**
+ * Analyzes Python code, resolving the target function by its EXACT byte
+ * range (UTF-8 byte offsets, tree-sitter's own unit -- not UTF-16 JS
+ * string indices) rather than by containment. Use this when the caller
+ * already has a canonical function coordinate (e.g. from a symbol index
+ * built on the same tree-sitter byte ranges) and needs the exact
+ * function, not whichever one happens to contain a position -- a
+ * position inside a nested function would otherwise resolve to its
+ * outer enclosing function via analyzePythonCode.
+ *
+ * Rejects with FunctionRangeNotFoundError if no function_definition has
+ * exactly this range.
+ */
+export async function analyzePythonFunction(
+  code: string,
+  range: { startByte: number; endByte: number }
+): Promise<FlowchartIR> {
+  if (!parserPromise) {
+    throw new Error("Python language service not initialized.");
+  }
+  const parser = await parserPromise;
+  return parser.generateFlowchartForRange(code, range);
 }

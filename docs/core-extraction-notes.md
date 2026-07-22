@@ -178,3 +178,55 @@ lost:
   codebase** — parsing happens in the extension host (Node), not the
   webview. The ticket's "keep browser loading available only if useful"
   bullet has nothing to preserve or build here.
+
+## PR #1 review fixes
+
+Four real issues, all verified fixed, not just addressed cosmetically:
+
+1. **Fresh-checkout builds were not reproducible.** Root `compile`/
+   `compile-tests`/`package` never built `packages/core` first, and its
+   `dist/` is gitignored — a real fresh clone would fail. Verified by
+   deleting `packages/core/dist` and re-running `npm run compile`, which
+   now runs a new `build:core` step first (`npm run build --workspace=
+   packages/core`) and succeeds. `packages/core`'s own `build` script now
+   also does `rimraf dist` before `tsc`, so a stale file from a removed
+   source file can't survive as leftover package output.
+2. **The public API couldn't reliably select a nested function.**
+   `analyzePythonCode`'s position-based lookup returns "the function
+   containing this position", which for a position inside a nested
+   function can return the OUTER function instead (confirmed with a real
+   fixture, `test-fixtures/python/nested_functions.py` — two different
+   closures both named `inner`). New `analyzePythonFunction(code,
+   {startByte, endByte})` resolves by **exact** byte range instead,
+   throwing a typed `FunctionRangeNotFoundError` when nothing matches
+   exactly — verified it correctly disambiguates both `inner` closures by
+   range, and that a position-based lookup for the same position really
+   does return `make_multiplier` (the outer function), not `inner`.
+   `startByte`/`endByte` are explicitly documented as UTF-8 byte offsets
+   (tree-sitter's own unit), not UTF-16 JS string indices.
+3. **The "narrow public API" wasn't actually enforced.** The 7 remaining
+   language parsers (and the Mermaid generators) imported arbitrary
+   `@codevisualizer/core/dist/...` paths directly, making every internal
+   file de facto public API. Added a package.json `exports` map
+   recognizing only `.` and `./internal` (a new `src/internal.ts`
+   entry point exposing exactly `AbstractParser`/`AstParserTypes`/
+   `StringProcessor` — everything the in-tree sibling parsers and Mermaid
+   generators actually need); `typesVersions` added alongside so this
+   repo's classic (`moduleResolution: "node"`) TypeScript config can still
+   resolve `/internal`'s types (the classic resolver ignores `exports`,
+   so this is required, not optional, for `tsc`/`ts-loader` to type-check
+   the migrated imports). Verified the boundary is real at runtime, not
+   cosmetic: a deliberate `require('@codevisualizer/core/dist/core/
+   common/AbstractParser')` now throws `ERR_PACKAGE_PATH_NOT_EXPORTED`,
+   while `require('@codevisualizer/core/internal')` resolves correctly.
+4. **Test gap: the snapshot script silently overwrote instead of
+   failing, and nothing ran in CI.** `scripts/snapshot-flowcharts.mjs`
+   now supports `--check` (structural JSON comparison against the
+   committed snapshots, non-zero exit on any mismatch) alongside its
+   original regenerate-and-write mode. New `.github/workflows/ci.yml`
+   (this repo had no CI at all before) runs, on a clean checkout: install,
+   build the core workspace, `snapshot-flowcharts.mjs --check`,
+   `packages/core`'s `node:test` suite, the extension's webpack compile,
+   lint, and `vscode-test`. New `packages/core/test/function-range.test.mjs`
+   formalizes finding 2's fixture-based verification into a real,
+   committed regression test (4 assertions, all passing).

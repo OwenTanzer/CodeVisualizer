@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main, fix/anthropic-llm-provider]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (root + packages/core workspace)
+        run: npm ci
+
+      - name: Build @codevisualizer/core
+        run: npm run build:core
+
+      - name: Check FlowchartIR snapshots match committed fixtures
+        run: node scripts/snapshot-flowcharts.mjs --check
+
+      - name: Run @codevisualizer/core tests
+        run: node --test packages/core/test/*.test.mjs
+
+      - name: Compile extension (webpack)
+        run: npm run compile
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run VS Code extension tests
+        run: xvfb-run -a npm test
