@@ -21,11 +21,32 @@ jobs:
       - name: Build @codevisualizer/core
         run: npm run build:core
 
-      - name: Check FlowchartIR snapshots match committed fixtures
-        run: node scripts/snapshot-flowcharts.mjs --check
+      - name: Check fork invariants (core boundary + Anthropic provider)
+        run: node scripts/check-fork-invariants.mjs
 
-      - name: Run @codevisualizer/core tests
+      # MOO-71 Commit 9: deterministic graph generation must never require an
+      # LLM credential -- that is what lets CodeFlow run the analysis path
+      # unattended, and what makes these results reproducible. Currently true by
+      # construction (the core package contains no LLM code at all, enforced by
+      # the step above), so this pins the property down rather than hoping it
+      # stays that way. The keys are cleared explicitly rather than merely being
+      # absent, so this keeps its meaning if the repo ever gains real LLM
+      # secrets in CI.
+      - name: Check FlowchartIR snapshots match committed fixtures (no LLM credentials)
+        run: node scripts/snapshot-flowcharts.mjs --check
+        env:
+          ANTHROPIC_API_KEY: ""
+          OPENAI_API_KEY: ""
+          GEMINI_API_KEY: ""
+          GROQ_API_KEY: ""
+
+      - name: Run @codevisualizer/core tests (no LLM credentials)
         run: node --test packages/core/test/*.test.mjs
+        env:
+          ANTHROPIC_API_KEY: ""
+          OPENAI_API_KEY: ""
+          GEMINI_API_KEY: ""
+          GROQ_API_KEY: ""
 
       - name: Compile extension (webpack)
         run: npm run compile
@@ -35,3 +56,23 @@ jobs:
 
       - name: Run VS Code extension tests
         run: xvfb-run -a npm test
+
+      # MOO-71 Commit 9: `npm run package` only runs webpack, so nothing ever
+      # inspected what a real .vsix would contain -- a broken manifest, a bad
+      # vscode:prepublish, or a .vscodeignore that drops a runtime asset would
+      # all ship undetected. Adding this immediately caught the packaged
+      # extension shipping test fixtures and build scripts to users.
+      #
+      # vsce is invoked via npx rather than added as a dependency: it is only
+      # ever needed in CI and by the existing publish:* scripts.
+      - name: Package extension (.vsix)
+        run: npx --yes @vscode/vsce package --allow-star-activation --no-git-tag-version
+
+      # The packaged artifact is what a reviewer can actually install to check
+      # the extension still works, which is the checklist's real question.
+      - name: Upload .vsix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codevisualizer-vsix
+          path: "*.vsix"
+          if-no-files-found: error

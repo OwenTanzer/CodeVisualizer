@@ -55,7 +55,23 @@ const parser = await PyAstParser.create(wasmPath);
 let mismatches = 0;
 
 for (const file of fixtureFiles) {
-  const source = readFileSync(join(fixturesDir, file), 'utf8');
+  // Normalize CRLF -> LF before parsing (MOO-71 Commit 9).
+  //
+  // FlowchartNode.location holds flat offsets into this source string, so the
+  // line-ending convention of the checkout silently changes every offset: on
+  // Windows, git's core.autocrlf checks these fixtures out with CRLF, adding one
+  // character per line. The committed snapshots are LF-based, so `--check` could
+  // never pass on a Windows checkout -- it reported all 7 fixtures as mismatched
+  // regardless of whether parsing had actually changed.
+  //
+  // That went unnoticed because CI runs on Linux, where it passes. A regression
+  // gate that always fails locally is worse than no gate: it trains everyone to
+  // ignore it, and this is the gate an upstream merge depends on
+  // (docs/upstream-compatibility.md). Snapshots describe the parser's behavior
+  // on canonical LF source, independent of how the repo happens to be checked
+  // out. .gitattributes now also pins these files to LF, but this normalization
+  // is what fixes trees that are *already* checked out with CRLF.
+  const source = readFileSync(join(fixturesDir, file), 'utf8').replace(/\r\n/g, '\n');
   const functionNames = parser.listFunctions(source);
   if (functionNames.length === 0) {
     throw new Error(`Fixture ${file} has no functions for listFunctions() to find.`);

@@ -1,0 +1,13 @@
+# MOO-71 Commit 9.
+#
+# FlowchartIR snapshots record flat character offsets into the fixture source,
+# so a CRLF checkout shifts every offset by one character per line and makes
+# `node scripts/snapshot-flowcharts.mjs --check` fail on Windows even when
+# parsing is unchanged. Pin both the fixtures and their snapshots to LF so the
+# on-disk bytes match what the snapshots describe.
+#
+# The script also normalizes CRLF -> LF when reading, which is what fixes trees
+# already checked out with CRLF; this attribute prevents the situation
+# recurring for fresh checkouts.
+test-fixtures/python/*.py text eol=lf
+test-fixtures/python/__snapshots__/*.json text eol=lf
