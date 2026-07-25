@@ -25,6 +25,7 @@
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { VSCODE_IMPORT, LLM_REFERENCE } from './fork-invariant-patterns.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const failures = [];
@@ -58,111 +59,80 @@ function read(relPath) {
 }
 
 // --- 1. core package boundary ----------------------------------------------
+// (VSCODE_IMPORT / LLM_REFERENCE now live in fork-invariant-patterns.mjs so
+// they're importable by the test file without an entry-point guard.)
 
-// `vscode` is only ever available inside the extension host. An import of it
-// anywhere in the core makes the package unusable from Node, which is CodeFlow's
-// entire consumption model.
-//
-// Covers static imports with a binding (`import x from "vscode"`), bare
-// side-effect imports (`import "vscode"`), dynamic imports (`import("vscode")`),
-// and both plain and TS-import-assignment `require` forms
-// (`require("vscode")` / `import x = require("vscode")` -- the latter matches
-// via the require() alternative since it contains that exact substring).
-export const VSCODE_IMPORT =
-  /(?:^|\n)\s*import\s+(?:[^;'"]*?from\s*)?['"]vscode['"]|import\(\s*['"]vscode['"]\s*\)|require\(\s*['"]vscode['"]\s*\)/;
-// The LLM subtree was deliberately excluded from the package boundary rather
-// than decoupled (MOO-71 Commit 2). Anything reaching back into it would drag
-// network calls and credentials into the deterministic analysis path.
-//
-// Matches a quoted import specifier whose path has "llm" as a whole segment
-// -- either in the middle (`../llm/x`), or as the specifier's final segment
-// with nothing after it (`../llm`) -- not merely as a substring of a longer
-// segment like "llmHelper".
-export const LLM_REFERENCE = /['"](?:[^'"]*\/)?llm(?:\/[^'"]*)?['"]|\bLLMService\b|\bLLMManager\b/;
-
-// Guarded so `scripts/check-fork-invariants.test.mjs` can import VSCODE_IMPORT
-// and LLM_REFERENCE without also running the full suite against this repo's
-// actual working tree (which requires a prior `build:core` and calls
-// process.exit(1) on failure).
-if (import.meta.url === `file://${process.argv[1]}`) {
-  runChecks();
-}
-
-function runChecks() {
-  for (const [label, dir, exts] of [
-    ['source', join(repoRoot, 'packages/core/src'), ['.ts']],
-    ['built output', join(repoRoot, 'packages/core/dist'), ['.js']],
-  ]) {
-    check(`@codevisualizer/core ${label} imports no vscode`, () => {
-      const files = walk(dir, (f) => exts.some((e) => f.endsWith(e)));
-      if (files.length === 0) {
-        // Built output only exists after `npm run build:core`; skipping silently
-        // would let this guard pass vacuously in CI.
-        throw new Error(
-          `no ${exts.join('/')} files found under ${relative(repoRoot, dir)} -- build the core first`,
-        );
-      }
-      const offenders = files.filter((f) => VSCODE_IMPORT.test(readFileSync(f, 'utf8')));
-      if (offenders.length > 0) {
-        throw new Error(
-          `imports vscode: ${offenders.map((f) => relative(repoRoot, f)).join(', ')}`,
-        );
-      }
-    });
-
-    check(`@codevisualizer/core ${label} references no LLM module`, () => {
-      const files = walk(dir, (f) => exts.some((e) => f.endsWith(e)));
-      const offenders = files.filter((f) => LLM_REFERENCE.test(readFileSync(f, 'utf8')));
-      if (offenders.length > 0) {
-        throw new Error(
-          `references an LLM module: ${offenders.map((f) => relative(repoRoot, f)).join(', ')}`,
-        );
-      }
-    });
-  }
-
-  // --- 2. Anthropic provider fix ---------------------------------------------
-
-  check('LLMService declares anthropic as a Provider', () => {
-    const src = read('src/core/llm/LLMService.ts');
-    if (!/export type Provider\s*=[^;]*"anthropic"/.test(src)) {
-      throw new Error('the Provider union no longer includes "anthropic"');
+for (const [label, dir, exts] of [
+  ['source', join(repoRoot, 'packages/core/src'), ['.ts']],
+  ['built output', join(repoRoot, 'packages/core/dist'), ['.js']],
+]) {
+  check(`@codevisualizer/core ${label} imports no vscode`, () => {
+    const files = walk(dir, (f) => exts.some((e) => f.endsWith(e)));
+    if (files.length === 0) {
+      // Built output only exists after `npm run build:core`; skipping silently
+      // would let this guard pass vacuously in CI.
+      throw new Error(
+        `no ${exts.join('/')} files found under ${relative(repoRoot, dir)} -- build the core first`,
+      );
+    }
+    const offenders = files.filter((f) => VSCODE_IMPORT.test(readFileSync(f, 'utf8')));
+    if (offenders.length > 0) {
+      throw new Error(`imports vscode: ${offenders.map((f) => relative(repoRoot, f)).join(', ')}`);
     }
   });
 
-  check('LLMService dispatches anthropic to callAnthropic', () => {
-    const src = read('src/core/llm/LLMService.ts');
-    if (!/case\s+"anthropic":[\s\S]{0,200}?callAnthropic\s*\(/.test(src)) {
+  check(`@codevisualizer/core ${label} references no LLM module`, () => {
+    const files = walk(dir, (f) => exts.some((e) => f.endsWith(e)));
+    const offenders = files.filter((f) => LLM_REFERENCE.test(readFileSync(f, 'utf8')));
+    if (offenders.length > 0) {
       throw new Error(
-        'the provider dispatch switch no longer routes "anthropic" to callAnthropic() -- this is the exact bug 353a00b fixed, where selecting Anthropic silently produced undefined',
+        `references an LLM module: ${offenders.map((f) => relative(repoRoot, f)).join(', ')}`,
       );
     }
   });
-
-  check('callAnthropic still calls the Anthropic Messages API', () => {
-    const src = read('src/core/llm/LLMService.ts');
-    if (!/async function callAnthropic\s*\(/.test(src)) throw new Error('callAnthropic() is gone');
-    if (!/https:\/\/api\.anthropic\.com\/v1\/messages/.test(src))
-      throw new Error('the Messages API endpoint is gone');
-    if (!/["']anthropic-version["']/.test(src))
-      throw new Error('the required anthropic-version header is gone');
-  });
-
-  check('LLMManager still offers Anthropic in the onboarding picker', () => {
-    const src = read('src/core/llm/LLMManager.ts');
-    if (!/value:\s*["']anthropic["']/.test(src)) {
-      throw new Error('the onboarding provider picker no longer offers Anthropic');
-    }
-  });
-
-  // --- report -----------------------------------------------------------------
-
-  for (const line of checks) console.log(line);
-
-  if (failures.length > 0) {
-    console.error(`\n${failures.length} fork invariant(s) broken: ${failures.join(', ')}`);
-    console.error('See docs/upstream-compatibility.md for why each of these exists.');
-    process.exit(1);
-  }
-  console.log(`\nAll ${checks.length} fork invariants hold.`);
 }
+
+// --- 2. Anthropic provider fix ---------------------------------------------
+
+check('LLMService declares anthropic as a Provider', () => {
+  const src = read('src/core/llm/LLMService.ts');
+  if (!/export type Provider\s*=[^;]*"anthropic"/.test(src)) {
+    throw new Error('the Provider union no longer includes "anthropic"');
+  }
+});
+
+check('LLMService dispatches anthropic to callAnthropic', () => {
+  const src = read('src/core/llm/LLMService.ts');
+  if (!/case\s+"anthropic":[\s\S]{0,200}?callAnthropic\s*\(/.test(src)) {
+    throw new Error(
+      'the provider dispatch switch no longer routes "anthropic" to callAnthropic() -- this is the exact bug 353a00b fixed, where selecting Anthropic silently produced undefined',
+    );
+  }
+});
+
+check('callAnthropic still calls the Anthropic Messages API', () => {
+  const src = read('src/core/llm/LLMService.ts');
+  if (!/async function callAnthropic\s*\(/.test(src)) throw new Error('callAnthropic() is gone');
+  if (!/https:\/\/api\.anthropic\.com\/v1\/messages/.test(src))
+    throw new Error('the Messages API endpoint is gone');
+  if (!/["']anthropic-version["']/.test(src))
+    throw new Error('the required anthropic-version header is gone');
+});
+
+check('LLMManager still offers Anthropic in the onboarding picker', () => {
+  const src = read('src/core/llm/LLMManager.ts');
+  if (!/value:\s*["']anthropic["']/.test(src)) {
+    throw new Error('the onboarding provider picker no longer offers Anthropic');
+  }
+});
+
+// --- report -----------------------------------------------------------------
+
+for (const line of checks) console.log(line);
+
+if (failures.length > 0) {
+  console.error(`\n${failures.length} fork invariant(s) broken: ${failures.join(', ')}`);
+  console.error('See docs/upstream-compatibility.md for why each of these exists.');
+  process.exit(1);
+}
+console.log(`\nAll ${checks.length} fork invariants hold.`);
