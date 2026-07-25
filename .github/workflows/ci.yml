@@ -24,6 +24,9 @@ jobs:
       - name: Check fork invariants (core boundary + Anthropic provider)
         run: node scripts/check-fork-invariants.mjs
 
+      - name: Test fork invariant guard's import/reference detection
+        run: node --test scripts/check-fork-invariants.test.mjs
+
       # MOO-71 Commit 9: deterministic graph generation must never require an
       # LLM credential -- that is what lets CodeFlow run the analysis path
       # unattended, and what makes these results reproducible. Currently true by
