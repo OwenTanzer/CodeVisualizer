@@ -12,3 +12,18 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+
+# MOO-71 Commit 9: dev-only artifacts that were shipping to users.
+# Found by adding real `vsce package` to CI -- the previous `npm run package`
+# only ran webpack, so nothing ever inspected what the .vsix actually
+# contained. packages/core/dist is deliberately NOT excluded: the extension
+# resolves tree-sitter-python.wasm from it at runtime via
+# resolvePythonWasmPath(), so dropping it would break Python analysis in a
+# packaged build while leaving development working.
+test-fixtures/**
+scripts/**
+docs/**
+packages/core/test/**
+packages/core/src/**
+packages/core/scripts/**
+**/*.tsbuildinfo
