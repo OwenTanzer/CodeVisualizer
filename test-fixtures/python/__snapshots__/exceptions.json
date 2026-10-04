@@ -178,6 +178,11 @@
       "location": {
         "start": 319,
         "end": 332
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return result"
       }
     }
   ],
