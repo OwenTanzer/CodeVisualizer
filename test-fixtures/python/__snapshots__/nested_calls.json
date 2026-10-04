@@ -52,6 +52,11 @@
       "location": {
         "start": 28,
         "end": 34
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "active = list(filter(lambda r: r.active, records))"
       }
     },
     {
@@ -214,6 +219,11 @@
       "location": {
         "start": 83,
         "end": 89
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "scores = map(lambda r: r.score, active)"
       }
     },
     {
@@ -322,6 +332,11 @@
       "location": {
         "start": 127,
         "end": 132
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "total = reduce(lambda acc, s: acc + s, scores, 0)"
       }
     },
     {
@@ -430,6 +445,11 @@
       "location": {
         "start": 181,
         "end": 221
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return build_summary(total, len(active))"
       }
     }
   ],

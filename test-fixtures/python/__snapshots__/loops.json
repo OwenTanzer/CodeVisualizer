@@ -160,6 +160,11 @@
       "location": {
         "start": 164,
         "end": 185
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return numbers[index]"
       }
     },
     {
@@ -178,6 +183,11 @@
       "location": {
         "start": 190,
         "end": 254
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "for extra in numbers"
       }
     },
     {
@@ -250,6 +260,11 @@
       "location": {
         "start": 259,
         "end": 270
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return None"
       }
     }
   ],

@@ -453,14 +453,18 @@ export class PyAstParser extends AbstractParser {
             });
 
             const consequenceId = this.generateNodeId("ternary_true");
-            nodes.push(
-              this.createSemanticNode(
-                consequenceId,
-                `${targetText} = ${this.escapeString(consequenceNode.text)}`,
-                NodeType.ASSIGNMENT,
-                statement
-              )
+            const consequenceAssignment = this.createSemanticNode(
+              consequenceId,
+              `${targetText} = ${this.escapeString(consequenceNode.text)}`,
+              NodeType.ASSIGNMENT,
+              statement
             );
+            consequenceAssignment.rawLabel = {
+              version: 1,
+              provenance: "python-parser-composition",
+              text: `${assignmentTargetNode.text} = ${consequenceNode.text}`,
+            };
+            nodes.push(consequenceAssignment);
             this.locationMap.push({
               start: statement.startIndex,
               end: statement.endIndex,
@@ -469,14 +473,18 @@ export class PyAstParser extends AbstractParser {
             edges.push({ from: conditionId, to: consequenceId, label: "True" });
 
             const alternativeId = this.generateNodeId("ternary_false");
-            nodes.push(
-              this.createSemanticNode(
-                alternativeId,
-                `${targetText} = ${this.escapeString(alternativeNode.text)}`,
-                NodeType.ASSIGNMENT,
-                statement
-              )
+            const alternativeAssignment = this.createSemanticNode(
+              alternativeId,
+              `${targetText} = ${this.escapeString(alternativeNode.text)}`,
+              NodeType.ASSIGNMENT,
+              statement
             );
+            alternativeAssignment.rawLabel = {
+              version: 1,
+              provenance: "python-parser-composition",
+              text: `${assignmentTargetNode.text} = ${alternativeNode.text}`,
+            };
+            nodes.push(alternativeAssignment);
             this.locationMap.push({
               start: statement.startIndex,
               end: statement.endIndex,
@@ -528,6 +536,11 @@ export class PyAstParser extends AbstractParser {
                   `${this.escapeString(assignmentTargetNode.text)} = ...`,
                   assignmentTargetNode
                 );
+                assignmentNode.rawLabel = {
+                  version: 1,
+                  provenance: "python-parser-composition",
+                  text: `${assignmentTargetNode.text} = ${expressionNode.text}`,
+                };
                 allNodes.unshift(assignmentNode);
                 if (currentEntry)
                   allEdges.unshift({ from: assignId, to: currentEntry });
@@ -619,6 +632,13 @@ export class PyAstParser extends AbstractParser {
         `${leftText} = ...`,
         assignment
       );
+      assignmentNode.rawLabel = {
+        version: 1,
+        provenance: "python-parser-composition",
+        text: `${assignment.childForFieldName("left")!.text} = ${
+          assignment.childForFieldName("right")!.text
+        }`,
+      };
       nodes.unshift(assignmentNode);
       if (entryPointId) edges.unshift({ from: assignId, to: entryPointId });
       entryPointId = assignId;
@@ -919,6 +939,11 @@ export class PyAstParser extends AbstractParser {
         forNode
       ),
     ];
+    nodes[0].rawLabel = {
+      version: 1,
+      provenance: "python-parser-composition",
+      text: `for ${left} in ${right}`,
+    };
     this.locationMap.push({
       start: forNode.startIndex,
       end: forNode.endIndex,
@@ -1059,14 +1084,18 @@ export class PyAstParser extends AbstractParser {
           }
 
           const returnId = this.generateNodeId("return_hof");
-          allNodes.push(
-            this.createSemanticNode(
-              returnId,
-              "return result",
-              NodeType.RETURN,
-              returnNode
-            )
+          const returnResultNode = this.createSemanticNode(
+            returnId,
+            "return result",
+            NodeType.RETURN,
+            returnNode
           );
+          returnResultNode.rawLabel = {
+            version: 1,
+            provenance: "python-parser-composition",
+            text: `return ${valueNode.text}`,
+          };
+          allNodes.push(returnResultNode);
           this.locationMap.push({
             start: returnNode.startIndex,
             end: returnNode.endIndex,
@@ -1102,6 +1131,11 @@ export class PyAstParser extends AbstractParser {
       NodeType.RETURN,
       returnNode
     );
+    node.rawLabel = {
+      version: 1,
+      provenance: "python-parser-composition",
+      text: valueNode ? `return ${valueNode.text}` : "return",
+    };
     const edges: FlowchartEdge[] = [
       {
         from: nodeId,
@@ -1469,6 +1503,13 @@ export class PyAstParser extends AbstractParser {
         withNode
       ),
     ];
+    if (withClauseNode) {
+      nodes[0].rawLabel = {
+        version: 1,
+        provenance: "python-parser-composition",
+        text: withClauseNode.text,
+      };
+    }
     this.locationMap.push({
       start: withNode.startIndex,
       end: withNode.endIndex,

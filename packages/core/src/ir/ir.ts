@@ -44,6 +44,12 @@ export interface SemanticNodeInfo {
 export interface FlowchartNode {
   id: string;
   label: string;
+  /** Authoritative parser-composed text, before presentation escaping or shortening. */
+  rawLabel?: {
+    version: 1;
+    provenance: "python-parser-composition";
+    text: string;
+  };
   location?: Location;
   shape?: "rect" | "diamond" | "round" | "stadium";
   style?: string;

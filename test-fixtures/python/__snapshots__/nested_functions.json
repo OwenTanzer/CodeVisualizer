@@ -70,6 +70,11 @@
       "location": {
         "start": 521,
         "end": 533
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return inner"
       }
     }
   ],

@@ -214,6 +214,11 @@
       "location": {
         "start": 246,
         "end": 258
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return grade"
       }
     }
   ],

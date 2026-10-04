@@ -70,6 +70,11 @@
       "location": {
         "start": 61,
         "end": 72
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return None"
       }
     },
     {
@@ -88,6 +93,11 @@
       "location": {
         "start": 77,
         "end": 196
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "for item in items"
       }
     },
     {
@@ -142,6 +152,11 @@
       "location": {
         "start": 136,
         "end": 147
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return item"
       }
     },
     {
@@ -178,6 +193,11 @@
       "location": {
         "start": 185,
         "end": 196
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return None"
       }
     },
     {
@@ -196,6 +216,11 @@
       "location": {
         "start": 201,
         "end": 217
+      },
+      "rawLabel": {
+        "version": 1,
+        "provenance": "python-parser-composition",
+        "text": "return items[-1]"
       }
     }
   ],
